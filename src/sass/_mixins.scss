@@ -1,0 +1,52 @@
+// Media Queries
+// usage: @include screen('phone') { .. }
+
+$breakpoints: (
+    "phone":        400px,
+    "phone-wide":   480px,
+    "phablet":      560px,
+    "tablet-small": 640px,
+    "tablet":       768px,
+    "tablet-wide":  1024px,
+    "desktop":      1248px,
+    "desktop-wide": 1440px
+);
+@mixin screen($width, $type: min) {
+    @if map_has_key($breakpoints, $width) {
+        $width: map_get($breakpoints, $width);
+        @if $type == max {
+            $width: $width - 1px;
+        }
+        @media only screen and (#{$type}-width: $width) {
+            @content;
+        }
+    }
+}
+
+// Font Size
+// usage: @include font-size(16px);
+
+@function calculateRem($size) {
+    $remSize: $size / 16px;
+    @return $remSize * 1rem;
+}
+  
+@mixin font-size($size) {
+    font-size: $size;
+    font-size: calculateRem($size);
+}
+
+
+// Vendor Prefixing
+// usage: @include prefix('box-sizing', 'border-box', moz webkit);
+
+@mixin prefix($property, $value, $vendors: webkit moz ms o, $default: true) {
+    @if $vendors {
+      @each $vendor in $vendors {
+        #{"-" + $vendor + "-" + $property}: #{$value};
+      }
+    }
+    @if $default {
+      #{$property}: #{$value};
+    }
+  }

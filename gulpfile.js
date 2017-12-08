@@ -6,8 +6,8 @@ const concat = require('gulp-concat');
 const autoprefixer = require('gulp-autoprefixer');
 var browserSync = require('browser-sync').create();
 var reload = browserSync.reload;
-// var autoprefixerOptions = {
-// 	browsers: ['last 2 versions', '> 5%', 'Firefox ESR'] };
+var autoprefixerOptions = {
+	browsers: ['last 2 versions', '> 5%', 'Firefox ESR'] };
 
 
 // Logs message
@@ -54,7 +54,7 @@ gulp.task('minify', function() {
 gulp.task('sass', function() {
 	gulp.src('src/sass/*.scss')
 	.pipe(sass({outputStyle: 'compressed'}).on('error', sass.logError))
-	// .pipe(autoprefixer(autoprefixerOptions))
+	.pipe(autoprefixer(autoprefixerOptions))
 	.pipe(concat('style.css'))
 	.pipe(gulp.dest('dist/css'))
 	.pipe(reload({stream: true}));

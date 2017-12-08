@@ -6,6 +6,8 @@ const concat = require('gulp-concat');
 const autoprefixer = require('gulp-autoprefixer');
 var browserSync = require('browser-sync').create();
 var reload = browserSync.reload;
+// var autoprefixerOptions = {
+// 	browsers: ['last 2 versions', '> 5%', 'Firefox ESR'] };
 
 
 // Logs message
@@ -34,7 +36,7 @@ gulp.task('copyhtml', function() {
 
 // Optimize images
 
-gulp.task('imageMin', () =>
+gulp.task('imagemin', () =>
     gulp.src('src/images/*')
     .pipe(imagemin())
         .pipe(gulp.dest('dist/images'))   
@@ -52,6 +54,7 @@ gulp.task('minify', function() {
 gulp.task('sass', function() {
 	gulp.src('src/sass/*.scss')
 	.pipe(sass({outputStyle: 'compressed'}).on('error', sass.logError))
+	// .pipe(autoprefixer(autoprefixerOptions))
 	.pipe(concat('style.css'))
 	.pipe(gulp.dest('dist/css'))
 	.pipe(reload({stream: true}));
@@ -67,25 +70,25 @@ gulp.task('scripts', function() {
 
 // Autoprefix
 
-gulp.task('prefix', () =>
-gulp.src('src/sass/*.scss')
-	.pipe(autoprefixer({
-		browsers: ['last 2 versions'],
-		cascade: false
-	}))
-	.pipe(gulp.dest('dist/css'))
-);
+// gulp.task('prefix', () =>
+// gulp.src('src/sass/*.scss')
+// 	.pipe(autoprefixer({
+// 		browsers: ['last 2 versions'],
+// 		cascade: false
+// 	}))
+// 	.pipe(gulp.dest('dist/css'))
+// );
 
 // Run ALL tasks
 
-gulp.task('default', ['message', 'copyhtml', 'imageMin', 'sass', 'prefix', 'scripts', 'browser-sync']);
+gulp.task('default', ['message', 'copyhtml', 'imagemin', 'sass', 'scripts', 'browser-sync']);
 
 // Watch Gulp tasks
 
 gulp.task('watch', ['browser-sync'], function() {
 	gulp.watch('src/js/*.js', ['scripts']);
-	gulp.watch('src/images/*', ['imageMin']);
+	gulp.watch('src/images/*', ['imagein']);
 	gulp.watch('src/sass/*.scss', ['sass']);
 	gulp.watch('src/*.html', ['copyhtml']);
-	gulp.watch('src/sass/*.scss', ['prefix']);
+	// gulp.watch('src/sass/*.scss', ['prefix']);
 });

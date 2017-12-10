@@ -52,7 +52,7 @@ gulp.task('minify', function() {
 
 // Compile Sass
 gulp.task('sass', function() {
-	gulp.src('src/sass/*.scss')
+	gulp.src('src/sass/**/*.scss')
 	.pipe(sass({outputStyle: 'compressed'}).on('error', sass.logError))
 	.pipe(autoprefixer(autoprefixerOptions))
 	.pipe(concat('style.css'))
@@ -77,6 +77,6 @@ gulp.task('default', ['message', 'copyhtml', 'imagemin', 'sass', 'scripts', 'bro
 gulp.task('watch', ['browser-sync'], function() {
 	gulp.watch('src/js/*.js', ['scripts']);
 	gulp.watch('src/images/*', ['imagein']);
-	gulp.watch('src/sass/*.scss', ['sass']);
+	gulp.watch('src/sass/**/*.scss', ['sass']);
 	gulp.watch('src/*.html', ['copyhtml']);
 });

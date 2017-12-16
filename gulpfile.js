@@ -1,9 +1,10 @@
-const gulp = require('gulp');
-const imagemin = require('gulp-imagemin');
-const uglify = require('gulp-uglify');
-const sass = require('gulp-sass');
-const concat = require('gulp-concat');
-const autoprefixer = require('gulp-autoprefixer');
+var gulp = require('gulp');
+var imagemin = require('gulp-imagemin');
+var uglify = require('gulp-uglify');
+var sass = require('gulp-sass');
+var concat = require('gulp-concat');
+var autoprefixer = require('gulp-autoprefixer');
+var htmlmin = require('gulp-htmlmin');
 var browserSync = require('browser-sync').create();
 var reload = browserSync.reload;
 var autoprefixerOptions = {
@@ -50,6 +51,12 @@ gulp.task('minify', function() {
 	.pipe(gulp.dest('dist/js'))
 });
 
+gulp.task('htmlminify', function() {
+	return gulp.src('src/*.html')
+	  .pipe(htmlmin({collapseWhitespace: true}))
+	  .pipe(gulp.dest('dist'));
+  });
+
 // Compile Sass
 gulp.task('sass', function() {
 	gulp.src('src/sass/**/*.scss')
@@ -70,7 +77,7 @@ gulp.task('scripts', function() {
 
 // Run ALL tasks
 
-gulp.task('default', ['message', 'copyhtml', 'imagemin', 'sass', 'scripts', 'browser-sync']);
+gulp.task('default', ['message', 'copyhtml', 'htmlminify', 'imagemin', 'sass', 'scripts', 'browser-sync']);
 
 // Watch Gulp tasks
 

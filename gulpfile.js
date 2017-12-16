@@ -1,9 +1,10 @@
-const gulp = require('gulp');
-const imagemin = require('gulp-imagemin');
-const uglify = require('gulp-uglify');
-const sass = require('gulp-sass');
-const concat = require('gulp-concat');
-const autoprefixer = require('gulp-autoprefixer');
+var gulp = require('gulp');
+var imagemin = require('gulp-imagemin');
+var uglify = require('gulp-uglify');
+var sass = require('gulp-sass');
+var concat = require('gulp-concat');
+var autoprefixer = require('gulp-autoprefixer');
+var htmlmin = require('gulp-htmlmin');
 var browserSync = require('browser-sync').create();
 var reload = browserSync.reload;
 var autoprefixerOptions = {
@@ -27,10 +28,11 @@ gulp.task('browser-sync',  ['sass'], function() {
     gulp.watch("src/*.html").on('change', reload);
 });
 
-// Copy all html files
+// Copy and minify all html files
 
 gulp.task('copyhtml', function() {
 	gulp.src('src/*.html')
+	.pipe(htmlmin({collapseWhitespace: true}))
 	.pipe(gulp.dest('dist'));
 });
 
@@ -52,7 +54,7 @@ gulp.task('minify', function() {
 
 // Compile Sass
 gulp.task('sass', function() {
-	gulp.src('src/sass/*.scss')
+	gulp.src('src/sass/**/*.scss')
 	.pipe(sass({outputStyle: 'compressed'}).on('error', sass.logError))
 	.pipe(autoprefixer(autoprefixerOptions))
 	.pipe(concat('style.css'))
@@ -70,13 +72,13 @@ gulp.task('scripts', function() {
 
 // Run ALL tasks
 
-gulp.task('default', ['message', 'copyhtml', 'imagemin', 'sass', 'scripts', 'browser-sync']);
+gulp.task('default', ['message', 'copyhtml', 'htmlminify', 'imagemin', 'sass', 'scripts', 'browser-sync']);
 
 // Watch Gulp tasks
 
 gulp.task('watch', ['browser-sync'], function() {
 	gulp.watch('src/js/*.js', ['scripts']);
 	gulp.watch('src/images/*', ['imagein']);
-	gulp.watch('src/sass/*.scss', ['sass']);
+	gulp.watch('src/sass/**/*.scss', ['sass']);
 	gulp.watch('src/*.html', ['copyhtml']);
 });

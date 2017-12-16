@@ -28,10 +28,11 @@ gulp.task('browser-sync',  ['sass'], function() {
     gulp.watch("src/*.html").on('change', reload);
 });
 
-// Copy all html files
+// Copy and minify all html files
 
 gulp.task('copyhtml', function() {
 	gulp.src('src/*.html')
+	.pipe(htmlmin({collapseWhitespace: true}))
 	.pipe(gulp.dest('dist'));
 });
 
@@ -50,12 +51,6 @@ gulp.task('minify', function() {
 	.pipe(uglify())
 	.pipe(gulp.dest('dist/js'))
 });
-
-gulp.task('htmlminify', function() {
-	return gulp.src('src/*.html')
-	  .pipe(htmlmin({collapseWhitespace: true}))
-	  .pipe(gulp.dest('dist'));
-  });
 
 // Compile Sass
 gulp.task('sass', function() {

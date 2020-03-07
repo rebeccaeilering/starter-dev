@@ -14,9 +14,11 @@
     "gulp": "^3.9.1",
     "gulp-autoprefixer": "^4.0.0",
     "gulp-concat": "^2.6.1",
+    "gulp-deploy-git": "^0.5.3",
+    "gulp-html-partial": "^1.0.1",
     "gulp-htmlmin": "^3.0.0",
     "gulp-imagemin": "^4.0.0",
     "gulp-sass": "^3.1.0",
-    "gulp-uglify": "^3.0.0"
+    "gulp-uglify-es": "^2.0.0"
   }
 }

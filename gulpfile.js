@@ -1,9 +1,10 @@
 var gulp = require('gulp');
-var imagemin = require('gulp-imagemin');
-var uglify = require('gulp-uglify');
+const imagemin = require('gulp-imagemin');
+let uglify = require('gulp-uglify-es').default;
 var sass = require('gulp-sass');
 var concat = require('gulp-concat');
 var autoprefixer = require('gulp-autoprefixer');
+const htmlPartial = require('gulp-html-partial');
 var htmlmin = require('gulp-htmlmin');
 var browserSync = require('browser-sync').create();
 var reload = browserSync.reload;
@@ -25,20 +26,23 @@ gulp.task('browser-sync',  ['sass'], function() {
         }
     });
     gulp.watch("src/sass/*.scss", ['sass']);
-    gulp.watch("src/*.html").on('change', reload);
+    gulp.watch("src/**/*.html").on('change', reload);
 });
 
-// Copy and minify all html files
+// Complile Partials, Copy and minify all html files
 
 gulp.task('copyhtml', function() {
-	gulp.src('src/*.html')
+	gulp.src('src/**/*.html')
+	.pipe(htmlPartial({
+		basePath: 'src/partials/'
+	}))
 	.pipe(htmlmin({collapseWhitespace: true}))
 	.pipe(gulp.dest('dist'));
 });
 
 // Optimize images
 
-gulp.task('imagemin', () =>
+gulp.task('imageMin', () =>
     gulp.src('src/images/*')
     .pipe(imagemin())
         .pipe(gulp.dest('dist/images'))   
@@ -65,20 +69,20 @@ gulp.task('sass', function() {
 // Concat Javascript
 gulp.task('scripts', function() {
 	gulp.src('src/js/*.js')
-	.pipe(concat('main.js'))
+	// .pipe(concat('main.js'))
 	.pipe(uglify())
 	.pipe(gulp.dest('dist/js'));
 });
 
 // Run ALL tasks
 
-gulp.task('default', ['message', 'copyhtml', 'htmlminify', 'imagemin', 'sass', 'scripts', 'browser-sync']);
+gulp.task('default', ['message', 'copyhtml', 'imageMin', 'sass', 'scripts', 'browser-sync']);
 
 // Watch Gulp tasks
 
 gulp.task('watch', ['browser-sync'], function() {
 	gulp.watch('src/js/*.js', ['scripts']);
-	gulp.watch('src/images/*', ['imagein']);
+	gulp.watch('src/images/*', ['imageMin']);
 	gulp.watch('src/sass/**/*.scss', ['sass']);
-	gulp.watch('src/*.html', ['copyhtml']);
+	gulp.watch('src/**/*.html', ['copyhtml']);
 });
